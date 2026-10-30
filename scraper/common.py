@@ -169,6 +169,8 @@ def extract_location(text: str) -> str:
     # run before it), so keep only what follows the last sentence break.
     city = re.split(r"(?<=[a-z]{2})\.\s+", m.group(1))[-1]
     city = _LOCATION_LABEL_RE.sub("", city) or city
+    # A leading airport identifier ("KCBK Colby") isn't part of the city.
+    city = re.sub(r"^[A-Z0-9]{3,4}\s+(?=[A-Z][a-z])", "", city)
     return f"{city}, {m.group(2)}"
 
 
